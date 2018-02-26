@@ -1,9 +1,11 @@
 #!/bin/bash
 set -eu
-
 export DEBIAN_FRONTEND=noninteractive
 
-VERSION=17.12.0-ce
+VERSION="17.12.0-ce"
+if [ ! -z "$1" ]; then
+  VERSION=$1
+fi
 DOCKER_INSTALLED=$(which docker)
 if [ ! -z "$DOCKER_INSTALLED" ]; then
 	HAS_VERSION=$(docker --version | grep $VERSION)
@@ -50,4 +52,4 @@ echo "Restarting docker"
 service docker stop || true
 service docker start
 
-docker -v
+docker --version
