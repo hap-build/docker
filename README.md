@@ -2,7 +2,7 @@
 
 ## Adding
 
-    git submodule add git@github.com:hap-build/docker scripts/docker
+    git submodule add https://github.com/hap-build/docker scripts/docker
 
 ## Hap Config
 
