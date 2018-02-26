@@ -7,6 +7,6 @@
 ## Hap Config
 
     [build "docker"]
-    cmd = "./scripts/docker/sysctl.sh"
-    cmd = "./scripts/docker/install.sh"
-    cmd = "./scripts/docker/install-compose.sh"
+    cmd = "sudo ./scripts/docker/sysctl.sh"
+    cmd = "sudo ./scripts/docker/install.sh"
+    cmd = "sudo ./scripts/docker/install-compose.sh"
