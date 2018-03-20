@@ -11,13 +11,13 @@ if [ ! -z "$1" ]; then
 fi
 
 INSTALLED=""
-if [ -f "/usr/local/bin/docker-compose" ]l then
+if [ -f "/usr/local/bin/docker-compose" ]; then
   INSTALLED=$(docker-compose -v | grep "version $VERSION")
 fi
 
 if [ -z "$INSTALLED" ]; then
-echo "Installing docker-compose v$VERSION"
-curl --silent -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+  echo "Installing docker-compose v$VERSION"
+  curl --silent -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-$(uname -s)-$(uname -m) >/usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
 fi
 docker-compose -v
