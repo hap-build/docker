@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FILE=/etc/default/grub
-if ! grep "cgroup_enable=memory swapaccount=1" $FILE; then
+if ! grep -q "cgroup_enable=memory swapaccount=1" $FILE; then
 	echo "Updating GRUB options"
 	VAR="GRUB_CMDLINE_LINUX"
 	VALUE="cgroup_enable=memory swapaccount=1"

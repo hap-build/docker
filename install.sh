@@ -3,12 +3,12 @@ export DEBIAN_FRONTEND=noninteractive
 
 DEFAULT_VERSION="18.06.1"
 VERSION=${1-$DEFAULT_VERSION}
-echo "Docker Version: $VERSION"
+
 DOCKER_INSTALLED=$(command -v docker)
 if [ -n "$DOCKER_INSTALLED" ]; then
 	HAS_VERSION=$(docker --version | grep $VERSION)
 	if [ -n "$HAS_VERSION" ]; then
-		echo "Docker $VERSION installed"
+		docker --version
 		exit 0
 	fi
 fi
