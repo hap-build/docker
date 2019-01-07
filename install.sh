@@ -1,37 +1,40 @@
 #!/bin/bash
-set -eu
 export DEBIAN_FRONTEND=noninteractive
 
-VERSION="18.09.0-ce"
-if [ ! -z "$1" ]; then
-	VERSION=$1
-fi
-DOCKER_INSTALLED=$(which docker)
-if [ ! -z "$DOCKER_INSTALLED" ]; then
+DEFAULT_VERSION="18.06.1"
+VERSION=${1-$DEFAULT_VERSION}
+echo "Docker Version: $VERSION"
+DOCKER_INSTALLED=$(command -v docker)
+if [ -n "$DOCKER_INSTALLED" ]; then
 	HAS_VERSION=$(docker --version | grep $VERSION)
-	if [ ! -z "$HAS_VERSION" ]; then
+	if [ -n "$HAS_VERSION" ]; then
 		echo "Docker $VERSION installed"
 		exit 0
 	fi
 fi
 
-echo "Installing packages"
+echo "Installing docker packages"
 apt-get -y -qq update
-apt-get -y -q remove docker docker-engine docker.io containerd runc
-apt-get -y -q purge "docker*" "docker-engine*" "docker.io*" "lxc-docker*"
-apt-get install -y -q apt-transport-https ca-certificates curl software-properties-common
+apt-get -y -qq remove docker docker-engine docker.io containerd runc
+apt-get -y -qq purge "docker*" "docker-engine*" "docker.io*" "lxc-docker*"
+apt-get install -y -qq apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository \
 	"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 apt-get -y -qq update
-apt-get install -y -q docker-ce=${VERSION}
+apt-get install -y -q docker-ce=$VERSION*
+
+HAS_VERSION=$(docker --version | grep $VERSION)
+if [ -z "$HAS_VERSION" ]; then
+	echo "Docker $VERSION NOT installed. Please try again."
+	exit 1
+fi
 
 if id ${USER} >/dev/null 2>&1; then
-	echo "Add ubuntu to docker group"
-	sudo usermod -aG docker ${USER}
-	sudo usermod -aG root ${USER}
+	echo "Add current user to docker group"
+	sudo usermod -aG docker "$USER"
 fi
 
 echo "Restarting docker"
